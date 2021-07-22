@@ -140,7 +140,7 @@ export const Menu = () => {
         </li>
         {id && 
         <li className='list' id={active === 5 && 'active'}>
-          <Link to={'/'} onMouseOver={() => setActive(5)} onMouseOut={() => setActive(0)}>
+          <Link to={'/'} onClick={() => localStorage.clear()} onMouseOver={() => setActive(5)} onMouseOut={() => setActive(0)}>
             <span className='icon'><i class="fas fa-door-open"></i></span>
             <span className='title'>Logoff</span>
           </Link>
