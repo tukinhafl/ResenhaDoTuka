@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios'
 import { useHistory } from 'react-router';
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast'
 
 const Container = styled.div`
   position: relative;
@@ -127,8 +128,11 @@ export const Card = ( { text, endpoint, altura } ) => {
     const URL = 'https://kenziehub.me/users'
     
     axios.post(URL, data)
-      .then(() => history.push('/login'))
-      .catch((err) => console.log(err))
+      .then(() => {
+        toast.success('Parabens, você largou o doritos!')
+        history.push('/login')
+      })
+      .catch(() => toast.error("Algo de errado não está certo."))
   }
 
   const onSubmitLogin = (e) => {
@@ -145,11 +149,12 @@ export const Card = ( { text, endpoint, altura } ) => {
         localStorage.setItem('id', response.data.user.id)
         history.push(`/wellcome/${response.data.user.id}`)
       })
-      .catch((err) => console.log(err))
+      .catch(() => toast.error("Você errou algo brosito."))
   }
 
   return (
     <Container>
+      <Toaster />
       <CardStyle altura={altura}>
         <div className='content'>
           <h2>{text}</h2>

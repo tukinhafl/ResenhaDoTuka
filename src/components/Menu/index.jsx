@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 const Navigation = styled.nav`
   position: fixed;
@@ -106,6 +107,10 @@ export const Menu = () => {
   const [active, setActive] = useState(0)
   const id = localStorage.getItem('id')
 
+  const withoutAuth = () => {
+    toast.error("Registre-se para acessar o Dashboard.")
+  }
+
   return (
     <Navigation>
       <ul>
@@ -128,11 +133,18 @@ export const Menu = () => {
           </Link>
         </li>
         <li className='list' id={active === 4 && 'active'}>
-          <Link to={id ? `/wellcome/${id}` : 'wellcome/:id'} onMouseOver={() => setActive(4)} onMouseOut={() => setActive(0)}>
-            <span className='icon'><i class="fas fa-door-open"></i></span>
+          <Link to={id ? `/wellcome/${id}` : '/register'} onClick={!id && withoutAuth} onMouseOver={() => setActive(4)} onMouseOut={() => setActive(0)}>
+            <span className='icon'><i class="fas fa-user-circle"></i></span>
             <span className='title'>Dashboard</span>
           </Link>
         </li>
+        {id && 
+        <li className='list' id={active === 5 && 'active'}>
+          <Link to={'/'} onMouseOver={() => setActive(5)} onMouseOut={() => setActive(0)}>
+            <span className='icon'><i class="fas fa-door-open"></i></span>
+            <span className='title'>Logoff</span>
+          </Link>
+        </li>}
       </ul>
     </Navigation>
   )

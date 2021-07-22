@@ -57,7 +57,8 @@ export const Wellcome = () => {
     })
       .then(() => axios.get(`https://kenziehub.me/users/${params.id}`)
       .then(response => setTechList(response.data.techs))
-      .catch(err => console.log(err)))
+      .catch(err => console.log(err))
+      )
       .catch(err => console.log(err))
   }
 
