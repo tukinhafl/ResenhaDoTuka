@@ -4,6 +4,7 @@ import { Register } from './pages/Register'
 import { Login } from './pages/Login'
 import { Wellcome } from './pages/Wellcome'
 import { Fireworks } from './components/Fireworks'
+import { Community } from './pages/Community'
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
         </Route>
         <Route path='/wellcome/:id'>
           <Wellcome />
+        </Route>
+        <Route path='/community'>
+          <Community />
         </Route>
       </Switch>
     </BrowserRouter>

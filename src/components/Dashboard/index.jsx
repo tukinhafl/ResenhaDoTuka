@@ -11,6 +11,26 @@ export const Dashboard = styled.div`
   flex-wrap: wrap;
   backdrop-filter: blur(5px);
 
+  .avatarContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .avatarButton {
+      margin: 10px 0;
+      padding: 5px 0;
+      width: 60%;
+      border-radius: 10px;
+      border: none;
+      text-transform: capitalize;
+
+      :hover {
+        cursor: pointer;
+        filter: brightness(0.7);
+      }
+    }
+  }
+
   .modal {
     position: absolute;
     opacity: 0.9;
@@ -124,7 +144,7 @@ export const Dashboard = styled.div`
     li {
       position: relative;
       height: 80%;
-      width: 200px;
+      width: 210px;
       margin: 20px;
       display: flex;
       align-items: center;
@@ -159,6 +179,17 @@ export const Dashboard = styled.div`
       p {
         padding: 15px;
         color: white;
+
+        i {
+          cursor: pointer;
+          
+          :nth-child(1) {
+            padding-right: 5px;
+          }
+          :nth-child(2) {
+            padding-left: 5px;
+          }
+        }
 
         :nth-child(2) {
           color: white;
