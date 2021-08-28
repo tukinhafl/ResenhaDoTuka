@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import toast from 'react-hot-toast'
 
 const Navigation = styled.nav`
   position: fixed;
