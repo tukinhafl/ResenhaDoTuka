@@ -104,7 +104,7 @@ const Navigation = styled.nav`
 `
 
 export const Menu = () => {
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useState<number>(0)
   const id = localStorage.getItem('id')
 
   const withoutAuth = () => {
@@ -116,38 +116,38 @@ export const Menu = () => {
       <ul>
         <li className='list' id={active === 1 && 'active'}>
           <Link to='/' onMouseOver={() => setActive(1)} onMouseOut={() => setActive(0)}>
-            <span className='icon'><i class="fas fa-home"></i></span>
+            <span className='icon'><i className="fas fa-home"></i></span>
             <span className='title'>Home</span>
           </Link>
         </li>
         <li className='list' id={active === 2 && 'active'}>
           <Link to="/register" onMouseOver={() => setActive(2)} onMouseOut={() => setActive(0)}>
-            <span className='icon'><i class="fas fa-clipboard-list"></i></span>
+            <span className='icon'><i className="fas fa-clipboard-list"></i></span>
             <span className='title'>Register</span>
           </Link>
         </li>
         <li className='list' id={active === 3 && 'active'}>
           <Link to='/login' onMouseOver={() => setActive(3)} onMouseOut={() => setActive(0)}>
-            <span className='icon'><i class="fas fa-sign-in-alt"></i></span>
+            <span className='icon'><i className="fas fa-sign-in-alt"></i></span>
             <span className='title'>Login</span>
           </Link>
         </li>
         <li className='list' id={active === 4 && 'active'}>
           <Link to={id ? `/wellcome/${id}` : '/register'} onClick={!id && withoutAuth} onMouseOver={() => setActive(4)} onMouseOut={() => setActive(0)}>
-            <span className='icon'><i class="fas fa-user-circle"></i></span>
+            <span className='icon'><i className="fas fa-user-circle"></i></span>
             <span className='title'>Dashboard</span>
           </Link>
         </li>
         <li className='list' id={active === 6 && 'active'}>
           <Link to='/community' onMouseOver={() => setActive(6)} onMouseOut={() => setActive(0)}>
-            <span className='icon'><i class="fas fa-users"></i></span>
+            <span className='icon'><i className="fas fa-users"></i></span>
             <span className='title'>Community</span>
           </Link>
         </li>
         {id && 
         <li className='list' id={active === 5 && 'active'}>
           <Link to={'/'} onClick={() => localStorage.clear()} onMouseOver={() => setActive(5)} onMouseOut={() => setActive(0)}>
-            <span className='icon'><i class="fas fa-door-open"></i></span>
+            <span className='icon'><i className="fas fa-door-open"></i></span>
             <span className='title'>Logoff</span>
           </Link>
         </li>}

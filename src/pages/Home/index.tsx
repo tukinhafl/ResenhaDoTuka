@@ -23,7 +23,7 @@ export const Home = () => {
             <strong>É FACIL, É UTIL, É A RESENHA DO TUKA!</strong>
           </p>
         </div>
-        <Fireworks ok={true}/>
+        <Fireworks/>
       </Landing>
     </>
   )

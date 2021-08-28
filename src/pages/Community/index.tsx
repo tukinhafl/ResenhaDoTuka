@@ -2,10 +2,11 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Menu } from '../../components/Menu'
 import { CommunityList } from '../../components/CommunityList'
+import { IComunidade } from '../../types'
 
 export const Community = () => {
-  const [comunidade, setComunidade] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
+  const [comunidade, setComunidade] = useState<IComunidade[]>([])
+  const [currentPage, setCurrentPage] = useState<number>(1)
 
   useEffect(() => {
     axios.get(`https://kenziehub.me/users?per_page=9&page=${currentPage}`)
@@ -20,8 +21,8 @@ export const Community = () => {
         setCurrentPage((currentPageInsideState) => currentPageInsideState + 1)
       }
     })
-
-    intersectionObserver.observe(document.querySelector('#sentinela'))
+    let sentinela = document.querySelector('#sentinela')
+    intersectionObserver.observe(sentinela as Element)
 
     return () => intersectionObserver.disconnect()
   }, [])

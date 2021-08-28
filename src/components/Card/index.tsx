@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios'
 import { useHistory } from 'react-router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast'
+import { ICardProps, IDivStyledProps, IUserInfo } from '../../types';
 
 const Container = styled.div`
   position: relative;
@@ -17,7 +18,7 @@ const Container = styled.div`
   z-index: 1;
 `
 
-const CardStyle = styled.div`
+const CardStyle = styled.div<IDivStyledProps>`
   position: relative;
   width: 600px;
   height: ${props => props.altura ? props.altura : '800px'};
@@ -106,7 +107,7 @@ const CardStyle = styled.div`
   }
 `
 
-export const Card = ( { text, endpoint, altura } ) => {
+export const Card = ( { text, endpoint, altura } : ICardProps ) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const history = useHistory()
@@ -124,18 +125,20 @@ export const Card = ( { text, endpoint, altura } ) => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmitRegister = (data) => {
+  const onSubmitRegister = async (data: IUserInfo) => {
     const URL = 'https://kenziehub.me/users'
     
-    axios.post(URL, data)
-      .then(() => {
-        toast.success('Parabens, você largou o doritos!')
-        history.push('/login')
-      })
-      .catch(() => toast.error("Algo de errado não está certo."))
+    try {
+      await axios.post(URL, data)
+        await toast.success('Parabens, você largou o doritos!')
+        await history.push('/login')
+    }
+    catch {
+      toast.error("Algo de errado não está certo.")
+    }
   }
 
-  const onSubmitLogin = (e) => {
+  const onSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     const formData = {
       email: email,
@@ -143,13 +146,15 @@ export const Card = ( { text, endpoint, altura } ) => {
     }
     const URL = 'https://kenziehub.me/sessions'
     
-    axios.post(URL, formData)
-      .then((response) => {
+    try {
+      const response = await axios.post(URL, formData)
         localStorage.setItem('token', response.data.token)
         localStorage.setItem('id', response.data.user.id)
         history.push(`/wellcome/${response.data.user.id}`)
-      })
-      .catch(() => toast.error("Você errou algo brosito."))
+    }
+    catch {
+      toast.error("Você errou algo brosito.")
+    }
   }
 
   return (

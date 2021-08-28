@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 import axios from 'axios'
+import React from 'react'
+import { IModalAvatar } from '../../types'
 
 const ModalAvatarStyle = styled.div`
   height: 100vh;
@@ -42,21 +44,21 @@ const ModalAvatarStyle = styled.div`
   }
 `
 
-export const ModalAvatar = ( { token, closeModalAvatar } ) => {
+export const ModalAvatar = ( { token, closeModalAvatar }: IModalAvatar ) => {
 
-  const mudaAvatar = (e) => {
+  const mudaAvatar = async (e: any) => {
     let avatarURL = e.target.previousElementSibling.value
 
-    axios.put('https://kenziehub.me/users/profile', {
+    const response = await axios.put('https://kenziehub.me/users/profile', {
       avatar_url: avatarURL
     }, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
-      .then(resp => console.log(resp))
-
+      await console.log(response)
   }
+
   return (
     <ModalAvatarStyle onClick={closeModalAvatar}>
       <div className='containerAvatarModal'>

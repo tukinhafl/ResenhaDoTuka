@@ -12,7 +12,7 @@ function App() {
       <Switch>
         <Route exact path='/'>
           <Home />
-          <Fireworks ok={true}/>
+          <Fireworks/>
         </Route>
         <Route path='/register'>
           <Register />

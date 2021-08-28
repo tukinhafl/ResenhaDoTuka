@@ -136,9 +136,6 @@ export const Dashboard = styled.div`
     ul {
       height: 100%;
       display: flex;
-      /* scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      --webkit-overflow-scrolling: touch; */
     }
     
     li {

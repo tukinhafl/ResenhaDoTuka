@@ -8,7 +8,6 @@ export const CommunityList = styled.div`
   box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.1);
-  /* overflow: hidden; */
   display: flex;
   justify-content: center;
   align-items: flex-end;

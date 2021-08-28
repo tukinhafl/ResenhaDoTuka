@@ -1,20 +1,21 @@
 import { Menu } from '../../components/Menu'
 import { Dashboard } from '../../components/Dashboard'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router'
 import toast, { Toaster } from 'react-hot-toast'
 import { ModalAvatar } from '../../components/ModalAvatar'
+import { IParams, ITechList, IUserInfo } from '../../types'
 
 export const Wellcome = () => {
-  const [estadoModalTech, setEstadoModalTech] = useState(undefined)
-  const [modalAvatar, setModalAvatar] = useState(undefined)
-  const [tech, setTech] = useState('')
-  const [nivel, setNivel] = useState('')
+  const [estadoModalTech, setEstadoModalTech] = useState<boolean>(false)
+  const [modalAvatar, setModalAvatar] = useState<boolean>(false)
+  const [tech, setTech] = useState<string>('')
+  const [nivel, setNivel] = useState<string>('')
   const token = localStorage.getItem('token')
-  const params = useParams()
-  const [techList, setTechList] = useState([])
-  const [userInfo, setUserInfo] = useState(undefined)
+  const params = useParams<IParams>()
+  const [techList, setTechList] = useState<ITechList[]>([])
+  const [userInfo, setUserInfo] = useState<IUserInfo>({} as IUserInfo)
   // eslint-disable-next-line
   const [avatar, setAvatar] = useState('http://s2.glbimg.com/k9S_nEXQns81MzLlZO61JyCwqRM=/0x0:694x363/695x364/s.glbimg.com/po/tt2/f/original/2015/07/01/snapchat-flashy-features.jpg')
 
@@ -44,7 +45,7 @@ export const Wellcome = () => {
       // eslint-disable-next-line
   }, [])
   
-  const handleTechRegister = (e) => {
+  const handleTechRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     const URL = 'https://kenziehub.me/users/techs'
     const registerTech = {
@@ -52,59 +53,71 @@ export const Wellcome = () => {
       status: nivel
     }
 
-    axios.post(URL, registerTech, {
+    try { 
+      const response = await axios.post(URL, registerTech, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      setTechList([...techList, response.data])
+      await setEstadoModalTech(false) 
+    }
+    catch {
+      toast.error("Algo deu errado.")
+    }
+  }
+
+  const deleteTech = async (id: string) => {
+    try{
+      await axios.delete(`https://kenziehub.me/users/techs/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
-      .then(response => setTechList([...techList, response.data]))
-      .then(() => setEstadoModalTech(false))
-      .catch((err) => console.log(err))
+      const response = await axios.get(`https://kenziehub.me/users/${params.id}`)
+      await setTechList(response.data.techs)
+    }
+    catch {
+      toast.error("Algo deu errado.")
+    }
   }
 
-  const deleteTech = (id) => {
-    axios.delete(`https://kenziehub.me/users/techs/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-      .then(() => axios.get(`https://kenziehub.me/users/${params.id}`)
-      .then(response => setTechList(response.data.techs))
-      .catch(err => console.log(err))
-      )
-      .catch(err => console.log(err))
-  }
-
-  const upgradeStatus = (e, id) => {
-    let statusAtual = e.target.dataset.status
+  const upgradeStatus = async ( e : React.SyntheticEvent<HTMLElement>, id : string ) => {
+    let statusAtual = e.currentTarget.dataset.status
     if(statusAtual === 'Iniciante') {
-      axios.put(`https://kenziehub.me/users/techs/${id}`, {
+      try {
+        await axios.put(`https://kenziehub.me/users/techs/${id}`, {
         status: 'Intermediario'
-      }, 
-      {
+        }, 
+        {
         headers: {
           Authorization: `Bearer ${token}`
         }
-      })
-      .then(() => axios.get(`https://kenziehub.me/users/${params.id}`))
-      .then(response => {
-        setTechList(response.data.techs)
+        })
+        const response = await axios.get(`https://kenziehub.me/users/${params.id}`)
+        await setTechList(response.data.techs)
         toast.success('Você evoluiu de Squirtle pra Wartortle. 😎')
-      })
+      }
+      catch {
+        toast.error("Algo deu errado.")
+      }
     } else if (statusAtual === 'Intermediario') {
-      axios.put(`https://kenziehub.me/users/techs/${id}`, {
-        status: 'Avançado'
-      }, 
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(() => axios.get(`https://kenziehub.me/users/${params.id}`))
-      .then(response => {
-        setTechList(response.data.techs)
+      try {
+        await axios.put(`https://kenziehub.me/users/techs/${id}`, {
+          status: 'Avançado'
+        }, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        const response = await axios.get(`https://kenziehub.me/users/${params.id}`)
+        await setTechList(response.data.techs)
         toast.success('Você evoluiu de Wartortle pra Blastoise. 🤩')
-      })
+      }
+      catch {
+        toast.error("Algo deu errado.")
+      }
     } else {
       toast('Você ja é um Blastoise.', {
         icon: '🥳'
@@ -112,36 +125,42 @@ export const Wellcome = () => {
     }
   }
 
-  const downgradeStatus = (e, id) => {
-    let statusAtual = e.target.dataset.status
+  const downgradeStatus = async (e : React.SyntheticEvent<HTMLElement>, id : string) => {
+    let statusAtual = e.currentTarget.dataset.status
     if(statusAtual === 'Avançado') {
-      axios.put(`https://kenziehub.me/users/techs/${id}`, {
-        status: 'Intermediario'
-      }, 
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(() => axios.get(`https://kenziehub.me/users/${params.id}`))
-      .then(response => {
-        setTechList(response.data.techs)
+      try {
+        await axios.put(`https://kenziehub.me/users/techs/${id}`, {
+          status: 'Intermediario'
+        }, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        const response = await axios.get(`https://kenziehub.me/users/${params.id}`)
+        await setTechList(response.data.techs)
         toast.success('Você era um Blastoise, agora virou um Wartortle. 🙁')
-      })
+      }
+      catch {
+        toast.error("Algo deu errado.")
+      }
     } else if (statusAtual === 'Intermediario') {
-      axios.put(`https://kenziehub.me/users/techs/${id}`, {
-        status: 'Iniciante'
-      }, 
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(() => axios.get(`https://kenziehub.me/users/${params.id}`))
-      .then(response => {
-        setTechList(response.data.techs)
+      try {
+        await axios.put(`https://kenziehub.me/users/techs/${id}`, {
+          status: 'Iniciante'
+        }, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        const response = await axios.get(`https://kenziehub.me/users/${params.id}`)
+        await setTechList(response.data.techs)
         toast.success('Você era um Wartortle e virou um Squirtle. 😢')
-      })
+      }
+      catch {
+        toast.error("Algo deu errado.")
+      }
     } else {
       toast.error('Você não pode voltar pra pokebola. 😭')
     }
@@ -151,7 +170,7 @@ export const Wellcome = () => {
     <>
       <Toaster />
       {modalAvatar &&
-        <ModalAvatar token={token} closeModalAvatar={closeModalAvatar}/>
+        <ModalAvatar token={token as string} closeModalAvatar={closeModalAvatar}/>
       }
       <Menu />
       <Dashboard>
@@ -182,11 +201,11 @@ export const Wellcome = () => {
               />
               <p>{elm.title}</p>
               <p>
-                <i class="fas fa-arrow-alt-circle-down" data-status={elm.status} onClick={(e) => downgradeStatus(e, elm.id)}></i>
+                <i className="fas fa-arrow-alt-circle-down" data-status={elm.status} onClick={(e) => downgradeStatus(e, elm.id)}></i>
                   Status: {elm.status}
-                <i class="fas fa-arrow-alt-circle-up" data-status={elm.status} onClick={(e) => upgradeStatus(e, elm.id)}></i>
+                <i className="fas fa-arrow-alt-circle-up" data-status={elm.status} onClick={(e) => upgradeStatus(e, elm.id)}></i>
               </p>
-              <span onClick={() => deleteTech(elm.id)}><i class="fas fa-trash-alt"></i></span>
+              <span onClick={() => deleteTech(elm.id)}><i className="fas fa-trash-alt"></i></span>
             </li>
             )}
             <li className='techCard botao'>
