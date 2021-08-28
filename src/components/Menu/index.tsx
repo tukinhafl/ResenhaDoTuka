@@ -39,7 +39,7 @@ const Navigation = styled.nav`
       border-top-left-radius: 20px;
       border-bottom-left-radius: 20px;
 
-      &#active {
+      &.active {
         background: #4187f6;
         
         a::before {
@@ -107,45 +107,41 @@ export const Menu = () => {
   const [active, setActive] = useState<number>(0)
   const id = localStorage.getItem('id')
 
-  const withoutAuth = () => {
-    toast.error("Registre-se para acessar o Dashboard.")
-  }
-
   return (
     <Navigation>
       <ul>
-        <li className='list' id={active === 1 && 'active'}>
+        <li className={`list ${active === 1 && 'active'}`}>
           <Link to='/' onMouseOver={() => setActive(1)} onMouseOut={() => setActive(0)}>
             <span className='icon'><i className="fas fa-home"></i></span>
             <span className='title'>Home</span>
           </Link>
         </li>
-        <li className='list' id={active === 2 && 'active'}>
+        <li className={`list ${active === 2 && 'active'}`}>
           <Link to="/register" onMouseOver={() => setActive(2)} onMouseOut={() => setActive(0)}>
             <span className='icon'><i className="fas fa-clipboard-list"></i></span>
             <span className='title'>Register</span>
           </Link>
         </li>
-        <li className='list' id={active === 3 && 'active'}>
+        <li className={`list ${active === 3 && 'active'}`}>
           <Link to='/login' onMouseOver={() => setActive(3)} onMouseOut={() => setActive(0)}>
             <span className='icon'><i className="fas fa-sign-in-alt"></i></span>
             <span className='title'>Login</span>
           </Link>
         </li>
-        <li className='list' id={active === 4 && 'active'}>
-          <Link to={id ? `/wellcome/${id}` : '/register'} onClick={!id && withoutAuth} onMouseOver={() => setActive(4)} onMouseOut={() => setActive(0)}>
+        <li className={`list ${active === 4 && 'active'}`}>
+          <Link to={id ? `/wellcome/${id}` : '/register'} onMouseOver={() => setActive(4)} onMouseOut={() => setActive(0)}>
             <span className='icon'><i className="fas fa-user-circle"></i></span>
             <span className='title'>Dashboard</span>
           </Link>
         </li>
-        <li className='list' id={active === 6 && 'active'}>
+        <li className={`list ${active === 6 && 'active'}`}>
           <Link to='/community' onMouseOver={() => setActive(6)} onMouseOut={() => setActive(0)}>
             <span className='icon'><i className="fas fa-users"></i></span>
             <span className='title'>Community</span>
           </Link>
         </li>
         {id && 
-        <li className='list' id={active === 5 && 'active'}>
+        <li className={`list ${active === 5 && 'active'}`}>
           <Link to={'/'} onClick={() => localStorage.clear()} onMouseOver={() => setActive(5)} onMouseOut={() => setActive(0)}>
             <span className='icon'><i className="fas fa-door-open"></i></span>
             <span className='title'>Logoff</span>
