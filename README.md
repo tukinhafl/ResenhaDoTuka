@@ -1,7 +1,7 @@
 # Resenha do Tuka
 
 <div align="center">
-  <img height=400px width=500px src="https://i.imgur.com/gcKWo3q.png" alt="Resenha do Tuka" border="0">
+  <img height=400px width=900px src="https://i.imgur.com/gcKWo3q.png" alt="Resenha do Tuka" border="0">
 </div>
 
 <h1 align="center">Aplicativo dinamico de cadastro de tecnologias.</h1>
